@@ -1,13 +1,51 @@
 package racingcar;
 import camp.nextstep.edu.missionutils.Console;
+import camp.nextstep.edu.missionutils.Randoms;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static camp.nextstep.edu.missionutils.Randoms.pickNumberInRange;
+
 public class Application {
     public static void main(String[] args) {
         // TODO: 프로그램 구현
         List<String> names = readAndValidateNames();
         int tryCount = readAndValidateTryCount();
+        List<Integer> cnt = new ArrayList<>();
+        // 초기화
+        for (int i = 0; i < names.size(); i++) {
+            cnt.add(0);
+        }
+        System.out.println();
+        System.out.println("실행 결과");
+
+        for (int i = 0; i < tryCount; i++) {
+            for (int j = 0; j < names.size(); j++){
+                Integer ramdom_num = Randoms.pickNumberInRange(0, 9);
+                if (ramdom_num >= 4){
+                    cnt.set(j, cnt.get(j) + 1);
+                }
+                String name = names.get(j);
+                String bar = "-".repeat(cnt.get(j));
+                System.out.println(name + " : " + bar);
+            }
+            System.out.println(); // 차수 사이 빈 줄
+        }
+        List<String> winners = new ArrayList<>();
+        Integer max_cnt = 0;
+        for (int j = 0; j < names.size(); j++){
+            if (cnt.get(j) > max_cnt){
+                max_cnt = cnt.get(j);
+                // 더 전진횟수가 많은 사람일 경우 배열 초기화
+                winners = new ArrayList<>();
+                winners.add(names.get(j));
+            } else if (cnt.get(j) == max_cnt) {
+                winners.add(names.get(j));
+            }
+        }
+        String result = String.join(", ", winners);
+        System.out.println("최종 우승자 : " + result);
     }
 
     private static List<String> readAndValidateNames() {
